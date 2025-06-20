@@ -1,0 +1,123 @@
+---
+import Image from '~/components/common/Image.astro';
+
+export interface Props {
+  id?: string;
+  subtitle?: string;
+  title?: string;
+  description?: string;
+}
+
+const {
+  id = 'gallery',
+  subtitle = 'GALLERY',
+  title = 'VISUAL<br>EXPERIENCE',
+  description = "Explore the atmosphere and aesthetics of Bayamo Beach Bar through our curated collection of images. Capturing the essence of our seaside sanctuary."
+} = Astro.props;
+
+// Structure the image data matching the React component
+const images = [
+  {
+    url: '~/assets/images/gallery-large.jpg',
+    alt: 'Beach bar setting',
+    size: 'large',
+  },
+  {
+    url: '~/assets/images/gallery-small-1.jpg',
+    alt: 'Cocktail',
+    size: 'small',
+  },
+  {
+    url: '~/assets/images/gallery-small-2.jpg',
+    alt: 'Beach view',
+    size: 'small',
+  },
+  {
+    url: '~/assets/images/gallery-medium.jpg',
+    alt: 'Sunset view',
+    size: 'medium',
+  },
+];
+---
+
+<section id={id} class="py-24 bg-white dark:bg-gray-900 transition-colors duration-300">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 mb-16">
+      <!-- Text Column -->
+      <div class="lg:col-span-4">
+        {subtitle && (
+          <h5 class="text-sm tracking-widest text-gray-500 dark:text-gray-400 mb-6 transition-colors duration-300">
+            {subtitle}
+          </h5>
+        )}
+        {title && (
+          <h2 
+            class="text-4xl md:text-5xl font-light text-gray-900 dark:text-white mb-8 transition-colors duration-300"
+            set:html={title}
+          />
+        )}
+        <div class="w-24 h-1 bg-blue-900 dark:bg-blue-400 mb-8 transition-colors duration-300"></div>
+        {description && (
+          <p class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed transition-colors duration-300">
+            {description}
+          </p>
+        )}
+      </div>
+
+      <!-- Asymmetrical Image Grid -->
+      <div class="lg:col-span-8">
+        <div class="grid grid-cols-12 gap-4">
+          <!-- Large Image (col-span-8) -->
+          <div class="col-span-12 md:col-span-8 overflow-hidden rounded-lg group">
+            <Image 
+              src={images[0].url}
+              alt={images[0].alt}
+              width={640}
+              height={400}
+              class="w-full h-[400px] object-cover transition-transform duration-500 group-hover:scale-110"
+              loading="eager"
+            />
+          </div>
+          
+          <!-- Two Small Images (col-span-4) -->
+          <div class="col-span-12 md:col-span-4">
+            <div class="grid grid-rows-2 gap-4 h-full">
+              <div class="overflow-hidden rounded-lg group">
+                <Image 
+                  src={images[1].url}
+                  alt={images[1].alt}
+                  width={320}
+                  height={190}
+                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  loading="eager"
+                />
+              </div>
+              <div class="overflow-hidden rounded-lg group">
+                <Image 
+                  src={images[2].url}
+                  alt={images[2].alt}
+                  width={320}
+                  height={190}
+                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  loading="eager"
+                />
+              </div>
+            </div>
+          </div>
+          
+          <!-- Medium Image (col-span-12) -->
+          <div class="col-span-12 overflow-hidden rounded-lg group">
+            <Image 
+              src={images[3].url}
+              alt={images[3].alt}
+              width={960}
+              height={300}
+              class="w-full h-[300px] object-cover transition-transform duration-500 group-hover:scale-110"
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

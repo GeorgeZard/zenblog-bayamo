@@ -1,0 +1,129 @@
+---
+import { Icon } from 'astro-icon/components';
+
+// BlogPost component - migrated from React
+// Maintains original functionality and appearance with full dark mode support
+
+// Example post data - in a real implementation, this would be fetched based on the route/slug
+const post = {
+  title: 'Summer Solstice Celebration at Bayamo',
+  image: 'https://images.unsplash.com/photo-1532452119098-a3650b3c46d3?ixlib=rb-4.0.3',
+  date: 'June 18, 2023',
+  category: 'Events',
+  author: 'Maria Papadopoulos',
+  content: `
+    <p>Each year as the summer solstice approaches, Bayamo Beach Bar transforms into a magical celebration of the season's longest day. This annual tradition has become one of our most anticipated events, drawing visitors from across Mani and beyond.</p>
+    <h2>A Celebration of Summer</h2>
+    <p>The Summer Solstice celebration at Bayamo is more than just a party—it's a tribute to the Mediterranean summer that defines our identity. As the sun lingers longer in the sky, we honor this natural phenomenon with an experience designed to engage all the senses.</p>
+    <p>This year's celebration featured a carefully curated selection of our signature cocktails, including the popular Mediterranean Sunset and our special Solstice Spritz, created specifically for the occasion. Our culinary team prepared a menu of locally-sourced delicacies that perfectly complemented the evening's festivities.</p>
+    <h2>Music and Atmosphere</h2>
+    <p>As twilight descended, the atmosphere was enhanced by the soulful melodies of local musician Nikos Dimitriou, whose acoustic performance provided the perfect soundtrack to the sunset. Later in the evening, DJ Elena took over, transforming the beach into an energetic dance floor under the stars.</p>
+    <blockquote>"The Summer Solstice at Bayamo captures everything I love about Greek summer nights—the music, the sea breeze, the incredible cocktails, and the feeling that the night might never end." — Andreas K., guest</blockquote>
+    <h2>Looking Forward</h2>
+    <p>If you missed this year's Summer Solstice celebration, don't worry—our calendar is filled with special events throughout the season. From full moon parties to themed cocktail nights, there's always something happening at Bayamo.</p>
+    <p>For those planning a special celebration of their own, remember that Bayamo offers custom event packages for birthdays, business gatherings, and wedding celebrations. Our team can help you create your own unforgettable summer experience.</p>
+  `,
+  relatedPosts: [
+    {
+      id: 2,
+      title: 'Signature Cocktail Series: Mediterranean Sunset',
+      image: 'https://images.unsplash.com/photo-1536935338788-846bb9981813?ixlib=rb-4.0.3',
+      slug: 'signature-cocktail-mediterranean-sunset',
+    },
+    {
+      id: 3,
+      title: 'A Perfect Day at Bayamo Beach Bar',
+      image: 'https://images.unsplash.com/photo-1520263115673-610416f52ab6?ixlib=rb-4.0.3',
+      slug: 'perfect-day-at-bayamo',
+    },
+  ],
+};
+---
+
+<section class="pt-32 pb-24 bg-white dark:bg-gray-900 transition-colors duration-300">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12">
+    <!-- Back to blog -->
+    <div class="mb-12">
+      <a href="/blog" class="inline-flex items-center text-gray-700 dark:text-gray-300 hover:text-blue-900 dark:hover:text-blue-400 transition-colors duration-300">
+        <Icon name="tabler:arrow-left" class="w-4 h-4 mr-2" />
+        <span class="text-sm tracking-widest">BACK TO BLOG</span>
+      </a>
+    </div>
+    <!-- Post header -->
+    <div class="max-w-4xl mx-auto mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <div class="flex items-center text-gray-500 dark:text-gray-400 transition-colors duration-300">
+          <Icon name="tabler:calendar" class="w-4 h-4 mr-2" />
+          <span class="text-sm">{post.date}</span>
+        </div>
+        <div class="flex items-center text-gray-500 dark:text-gray-400 transition-colors duration-300">
+          <Icon name="tabler:tag" class="w-4 h-4 mr-2" />
+          <span class="text-sm">{post.category}</span>
+        </div>
+      </div>
+      <h1 class="text-4xl md:text-6xl font-light text-gray-900 dark:text-white mb-8 transition-colors duration-300">{post.title}</h1>
+      <div class="flex items-center mb-12">
+        <div class="w-10 h-10 bg-gray-300 dark:bg-gray-600 rounded-full mr-3 transition-colors duration-300"></div>
+        <span class="text-gray-700 dark:text-gray-300 transition-colors duration-300">By {post.author}</span>
+      </div>
+      <div class="aspect-[16/9] mb-12">
+        <img src={post.image} alt={post.title} class="w-full h-full object-cover" />
+      </div>
+    </div>
+    <!-- Post content -->
+    <div class="max-w-3xl mx-auto mb-16">
+      <div
+        class="prose prose-lg dark:prose-invert prose-headings:text-gray-900 dark:prose-headings:text-white prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-blockquote:text-gray-600 dark:prose-blockquote:text-gray-400 prose-blockquote:border-blue-900 dark:prose-blockquote:border-blue-400 max-w-none"
+        set:html={post.content}
+      />
+    </div>
+    <!-- Share and tags -->
+    <div class="max-w-3xl mx-auto mb-16 pt-8 border-t border-gray-200 dark:border-gray-700 transition-colors duration-300">
+      <div class="flex flex-wrap justify-between items-center">
+        <div class="mb-4 md:mb-0">
+          <span class="text-sm text-gray-500 dark:text-gray-400 tracking-widest mr-4 transition-colors duration-300">TAGGED IN</span>
+          <a href="#" class="inline-block bg-[#f5f3ee] dark:bg-gray-700 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 mr-2 transition-colors duration-300">
+            Events
+          </a>
+          <a href="#" class="inline-block bg-[#f5f3ee] dark:bg-gray-700 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 transition-colors duration-300">
+            Summer
+          </a>
+        </div>
+        <div class="flex items-center">
+          <span class="text-sm text-gray-500 dark:text-gray-400 tracking-widest mr-4 transition-colors duration-300">SHARE</span>
+          <div class="flex space-x-3">
+            <a href="#" class="text-gray-500 dark:text-gray-400 hover:text-blue-900 dark:hover:text-blue-400 transition-colors duration-300">
+              <Icon name="tabler:brand-facebook" class="w-5 h-5" />
+            </a>
+            <a href="#" class="text-gray-500 dark:text-gray-400 hover:text-blue-900 dark:hover:text-blue-400 transition-colors duration-300">
+              <Icon name="tabler:brand-instagram" class="w-5 h-5" />
+            </a>
+            <a href="#" class="text-gray-500 dark:text-gray-400 hover:text-blue-900 dark:hover:text-blue-400 transition-colors duration-300">
+              <Icon name="tabler:brand-twitter" class="w-5 h-5" />
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Related posts -->
+    <div class="max-w-5xl mx-auto">
+      <h3 class="text-2xl font-light text-gray-900 dark:text-white mb-8 transition-colors duration-300">Related Stories</h3>
+      <div class="grid md:grid-cols-2 gap-8">
+        {post.relatedPosts.map((relatedPost) => (
+          <a href={`/blog/${relatedPost.slug}`} class="group">
+            <div class="relative aspect-[16/9] mb-4 overflow-hidden">
+              <img
+                src={relatedPost.image}
+                alt={relatedPost.title}
+                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+            </div>
+            <h4 class="text-xl text-gray-900 dark:text-white group-hover:text-blue-900 dark:group-hover:text-blue-400 transition-colors duration-300">
+              {relatedPost.title}
+            </h4>
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

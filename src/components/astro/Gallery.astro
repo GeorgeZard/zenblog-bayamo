@@ -1,0 +1,63 @@
+---
+// Gallery component - migrated from React
+// Maintains original functionality and appearance with full dark mode support
+
+const images = [
+  {
+    url: 'https://images.unsplash.com/photo-1560624052-449f5ddf0c31?ixlib=rb-4.0.3',
+    alt: 'Beach bar setting',
+    size: 'large',
+  },
+  {
+    url: 'https://images.unsplash.com/photo-1541417904950-b855846fe074?ixlib=rb-4.0.3',
+    alt: 'Cocktail',
+    size: 'small',
+  },
+  {
+    url: 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?ixlib=rb-4.0.3',
+    alt: 'Beach view',
+    size: 'small',
+  },
+  {
+    url: 'https://images.unsplash.com/photo-1437846972679-9e6e537be46e?ixlib=rb-4.0.3',
+    alt: 'Sunset view',
+    size: 'medium',
+  },
+];
+---
+
+<section id="gallery" class="py-24 bg-white dark:bg-gray-900 transition-colors duration-300">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 mb-16">
+      <div class="lg:col-span-4">
+        <h5 class="text-sm tracking-widest text-gray-500 dark:text-gray-400 mb-6 transition-colors duration-300">GALLERY</h5>
+        <h2 class="text-4xl md:text-5xl font-light text-gray-900 dark:text-white mb-8 transition-colors duration-300">
+          VISUAL
+          <br />
+          EXPERIENCE
+        </h2>
+        <div class="w-24 h-1 bg-blue-900 dark:bg-blue-400 mb-8 transition-colors duration-300"></div>
+        <p class="text-lg text-gray-700 dark:text-gray-300 transition-colors duration-300">
+          Explore the atmosphere and aesthetics of Bayamo Beach Bar through our curated collection of images.
+          Capturing the essence of our seaside sanctuary.
+        </p>
+      </div>
+      <div class="lg:col-span-8">
+        <div class="grid grid-cols-12 gap-4">
+          <div class="col-span-12 md:col-span-8">
+            <img src={images[0].url} alt={images[0].alt} class="w-full h-[400px] object-cover hover:scale-105 transition-transform duration-500" />
+          </div>
+          <div class="col-span-12 md:col-span-4">
+            <div class="grid grid-rows-2 gap-4 h-full">
+              <img src={images[1].url} alt={images[1].alt} class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+              <img src={images[2].url} alt={images[2].alt} class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+            </div>
+          </div>
+          <div class="col-span-12">
+            <img src={images[3].url} alt={images[3].alt} class="w-full h-[300px] object-cover hover:scale-105 transition-transform duration-500" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

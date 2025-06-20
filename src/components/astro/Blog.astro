@@ -1,0 +1,126 @@
+---
+import { Icon } from 'astro-icon/components';
+import Grid from '~/components/blog/Grid.astro';
+import { fetchPosts } from '~/utils/blog';
+
+// Blog component - updated to use AstroWind's existing Grid components
+// Maintains original functionality and appearance with full dark mode support
+// Includes interactive category filtering via client-side script
+
+// Fetch real posts from AstroWind content system
+const allPosts = await fetchPosts();
+
+// Get unique categories from real posts, plus 'All'
+const categorySet = new Set(['All']);
+allPosts.forEach(post => {
+  if (post.category?.title) {
+    categorySet.add(post.category.title);
+  }
+});
+const categories = Array.from(categorySet);
+
+// Use first 6 posts for homepage preview - no transformation needed
+const previewPosts = allPosts.slice(0, 6);
+---
+
+<section id="blog" class="py-24 bg-[#f5f3ee] dark:bg-gray-800 transition-colors duration-300">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12">
+    <!-- Header -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 mb-16">
+      <div class="lg:col-span-6">
+        <h5 class="text-sm tracking-widest text-gray-500 dark:text-gray-400 mb-6 transition-colors duration-300">OUR JOURNAL</h5>
+        <h2 class="text-4xl md:text-6xl font-light text-gray-900 dark:text-white mb-8 transition-colors duration-300">
+          BAYAMO
+          <br />
+          STORIES
+        </h2>
+        <div class="w-24 h-1 bg-blue-900 dark:bg-blue-400 mb-8 transition-colors duration-300"></div>
+        <p class="text-xl text-gray-700 dark:text-gray-300 mb-6 max-w-lg transition-colors duration-300">
+          Explore our collection of stories, insights and updates from Bayamo Beach Bar. Discover the experiences
+          that make our venue truly special.
+        </p>
+      </div>
+      <!-- Category Filter -->
+      <div class="lg:col-span-6 flex items-end">
+        <div class="w-full">
+          <div class="flex items-center mb-4">
+            <Icon name="tabler:filter" class="w-5 h-5 text-gray-500 dark:text-gray-400 mr-2 transition-colors duration-300" />
+            <span class="text-sm text-gray-500 dark:text-gray-400 tracking-widest transition-colors duration-300">FILTER BY</span>
+          </div>
+          <div class="flex flex-wrap gap-3" id="category-filters">
+            {categories.map((category) => (
+              <button
+                class={`px-6 py-2 text-sm tracking-wider transition-colors duration-300 category-filter ${
+                  category === 'All'
+                    ? 'bg-blue-900 dark:bg-blue-600 text-white'
+                    : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'
+                }`}
+                data-category={category}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Blog Posts Grid - Using AstroWind's Grid component -->
+    <div id="blog-posts-grid">
+      <Grid posts={previewPosts} />
+    </div>
+    
+    <!-- View All Button -->
+    <div class="mt-16 flex justify-center">
+      <a 
+        href="/blog" 
+        class="inline-flex items-center bg-blue-900 dark:bg-blue-600 hover:bg-blue-700 dark:hover:bg-blue-500 text-white px-8 py-4 rounded text-sm tracking-wider transition-all duration-300 transform hover:scale-105 hover:shadow-lg group"
+      >
+        <span class="mr-2">VIEW ALL STORIES</span>
+        <Icon name="tabler:arrow-right" class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+      </a>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Blog category filtering functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    const categoryFilters = document.querySelectorAll('.category-filter');
+    const blogPostItems = document.querySelectorAll('article[data-category]');
+
+    categoryFilters.forEach(filter => {
+      filter.addEventListener('click', () => {
+        const selectedCategory = filter.getAttribute('data-category');
+        
+        // Update active button styles
+        categoryFilters.forEach(btn => {
+          btn.classList.remove('bg-blue-900', 'dark:bg-blue-600', 'text-white');
+          btn.classList.add('bg-white', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300', 'hover:bg-gray-100', 'dark:hover:bg-gray-600');
+        });
+        
+        filter.classList.add('bg-blue-900', 'dark:bg-blue-600', 'text-white');
+        filter.classList.remove('bg-white', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300', 'hover:bg-gray-100', 'dark:hover:bg-gray-600');
+        
+        // Filter blog posts using the data-category attribute
+        blogPostItems.forEach(item => {
+          const htmlItem = item as HTMLElement;
+          const postCategory = htmlItem.getAttribute('data-category') || 'Uncategorized';
+          
+          if (selectedCategory === 'All' || postCategory === selectedCategory) {
+            htmlItem.style.display = 'block';
+            htmlItem.style.opacity = '0';
+            setTimeout(() => {
+              htmlItem.style.opacity = '1';
+            }, 50);
+          } else {
+            htmlItem.style.opacity = '0';
+            setTimeout(() => {
+              htmlItem.style.display = 'none';
+            }, 300);
+          }
+        });
+      });
+    });
+  });
+</script>

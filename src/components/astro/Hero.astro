@@ -1,0 +1,38 @@
+---
+// Hero component - migrated from React
+// Maintains original functionality and appearance with full dark mode support
+---
+
+<section id="home" class="pt-32 pb-20 w-full bg-[#f5f3ee] dark:bg-gray-800 transition-colors duration-300">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+      <!-- Left Column - Typography -->
+      <div class="lg:col-span-6 flex flex-col justify-center">
+        <h5 class="text-sm tracking-widest text-gray-500 dark:text-gray-400 mb-6 transition-colors duration-300">SEASIDE EXPERIENCE</h5>
+        <h1 class="text-6xl md:text-8xl font-light text-gray-900 dark:text-white leading-none mb-8 transition-colors duration-300">
+          BAY<span class="font-normal">AMO</span>
+        </h1>
+        <div class="w-24 h-1 bg-blue-900 dark:bg-blue-400 mb-8 transition-colors duration-300"></div>
+        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-md transition-colors duration-300">
+          Curated beachside experiences in Gythio, Mani. Premium cocktails and unforgettable moments by the
+          Mediterranean.
+        </p>
+        <div class="italic text-gray-500 dark:text-gray-400 text-sm transition-colors duration-300">established 2015</div>
+      </div>
+      <!-- Right Column - Image -->
+      <div class="lg:col-span-6">
+        <div class="relative">
+          <img
+            src="https://images.unsplash.com/photo-1621275471769-e6aa344546d5?ixlib=rb-4.0.3"
+            alt="Bayamo Beach Bar"
+            class="w-full h-[500px] md:h-[600px] object-cover"
+          />
+          <div class="absolute bottom-0 right-0 bg-white dark:bg-gray-800 p-6 max-w-xs transition-colors duration-300">
+            <p class="text-sm text-gray-700 dark:text-gray-300 transition-colors duration-300">"The most aesthetically pleasing beach bar on the coast"</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-2 transition-colors duration-300">— Mani Travel Magazine</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

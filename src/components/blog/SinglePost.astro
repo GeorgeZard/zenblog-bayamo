@@ -18,86 +18,83 @@ export interface Props {
 const { post, url } = Astro.props;
 ---
 
-<section class="py-8 sm:py-16 lg:py-20 mx-auto">
-  <article>
-    <header
-      class={post.image
-        ? 'intersect-once intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade'
-        : 'intersect-once intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade'}
-    >
-      <div class="flex justify-between flex-col sm:flex-row max-w-3xl mx-auto mt-0 mb-2 px-4 sm:px-6 sm:items-center">
-        <p>
-          <Icon name="tabler:clock" class="w-4 h-4 inline-block -mt-0.5 dark:text-gray-400" />
-          <time datetime={String(post.publishDate)} class="inline-block">{getFormattedDate(post.publishDate)}</time>
-          {
-            post.author && (
-              <>
-                {' '}
-                · <Icon name="tabler:user" class="w-4 h-4 inline-block -mt-0.5 dark:text-gray-400" />
-                <span class="inline-block">{post.author}</span>
-              </>
-            )
-          }
+<section class="pt-32 pb-24 bg-[#f5f3ee] dark:bg-gray-800 transition-colors duration-300">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12">
+    <!-- Back to blog -->
+    <div class="mb-12">
+      <a href="/blog" class="inline-flex items-center text-gray-700 dark:text-gray-300 hover:text-blue-900 dark:hover:text-blue-400 transition-colors duration-300">
+        <Icon name="tabler:arrow-left" class="w-4 h-4 mr-2" />
+        <span class="text-sm tracking-widest">BACK TO BLOG</span>
+      </a>
+    </div>
+    
+    <article class="intersect-once intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade">
+      <!-- Post header -->
+      <div class="max-w-4xl mx-auto mb-16">
+        <div class="flex items-center space-x-4 mb-6">
+          <div class="flex items-center text-gray-500 dark:text-gray-400 transition-colors duration-300">
+            <Icon name="tabler:calendar" class="w-4 h-4 mr-2" />
+            <time datetime={String(post.publishDate)} class="text-sm">{getFormattedDate(post.publishDate)}</time>
+          </div>
           {
             post.category && (
-              <>
-                {' '}
-                ·{' '}
-                <a class="hover:underline inline-block" href={getPermalink(post.category.slug, 'category')}>
+              <div class="flex items-center text-gray-500 dark:text-gray-400 transition-colors duration-300">
+                <Icon name="tabler:tag" class="w-4 h-4 mr-2" />
+                <a class="text-sm hover:text-blue-900 dark:hover:text-blue-400 transition-colors" href={getPermalink(post.category.slug, 'category')}>
                   {post.category.title}
                 </a>
-              </>
+              </div>
             )
           }
-          {
-            post.readingTime && (
-              <>
-                &nbsp;· <span>{post.readingTime}</span> min read
-              </>
-            )
-          }
-        </p>
+        </div>
+        <h1 class="text-4xl md:text-6xl font-light text-gray-900 dark:text-white mb-8 transition-colors duration-300">
+          {post.title}
+        </h1>
+        <div class="flex items-center mb-12">
+          <div class="w-10 h-10 bg-gray-300 dark:bg-gray-600 rounded-full mr-3 transition-colors duration-300"></div>
+          <span class="text-gray-700 dark:text-gray-300 transition-colors duration-300">
+            By {post.author || 'Bayamo Team'}
+          </span>
+        </div>
+        {
+          post.image && (
+            <div class="aspect-[16/9] mb-12">
+              <Image
+                src={post.image}
+                class="w-full h-full object-cover rounded-lg shadow-lg"
+                widths={[400, 900]}
+                sizes="(max-width: 900px) 400px, 900px"
+                alt={post?.excerpt || post.title}
+                width={900}
+                height={506}
+                loading="eager"
+                decoding="async"
+              />
+            </div>
+          )
+        }
       </div>
-
-      <h1
-        class="px-4 sm:px-6 max-w-3xl mx-auto text-4xl md:text-5xl font-bold leading-tighter tracking-tighter font-heading"
-      >
-        {post.title}
-      </h1>
-      <p
-        class="max-w-3xl mx-auto mt-4 mb-8 px-4 sm:px-6 text-xl md:text-2xl text-muted dark:text-slate-400 text-justify"
-      >
-        {post.excerpt}
-      </p>
-
-      {
-        post.image ? (
-          <Image
-            src={post.image}
-            class="max-w-full lg:max-w-[900px] mx-auto mb-6 sm:rounded-md bg-gray-400 dark:bg-slate-700"
-            widths={[400, 900]}
-            sizes="(max-width: 900px) 400px, 900px"
-            alt={post?.excerpt || ''}
-            width={900}
-            height={506}
-            loading="eager"
-            decoding="async"
-          />
-        ) : (
-          <div class="max-w-3xl mx-auto px-4 sm:px-6">
-            <div class="border-t dark:border-slate-700" />
+      
+      <!-- Post content -->
+      <div class="max-w-3xl mx-auto mb-16">
+        <div class="prose prose-lg dark:prose-invert prose-headings:text-gray-900 dark:prose-headings:text-white prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-blockquote:text-gray-600 dark:prose-blockquote:text-gray-400 prose-blockquote:border-blue-900 dark:prose-blockquote:border-blue-400 max-w-none prose-headings:scroll-mt-[80px]">
+          <slot />
+        </div>
+      </div>
+      
+      <!-- Share and tags -->
+      <div class="max-w-3xl mx-auto mb-16 pt-8 border-t border-gray-200 dark:border-gray-700 transition-colors duration-300">
+        <div class="flex flex-wrap justify-between items-center">
+          <div class="mb-4 md:mb-0">
+            <span class="text-sm text-gray-500 dark:text-gray-400 tracking-widest mr-4 transition-colors duration-300">TAGGED IN</span>
+            <PostTags tags={post.tags} class="inline-flex flex-wrap gap-2" />
           </div>
-        )
-      }
-    </header>
-    <div
-      class="mx-auto px-6 sm:px-6 max-w-3xl prose prose-md lg:prose-xl dark:prose-invert dark:prose-headings:text-slate-300 prose-headings:font-heading prose-headings:leading-tighter prose-headings:tracking-tighter prose-headings:font-bold prose-a:text-primary dark:prose-a:text-blue-400 prose-img:rounded-md prose-img:shadow-lg mt-8 prose-headings:scroll-mt-[80px] prose-li:my-0"
-    >
-      <slot />
-    </div>
-    <div class="mx-auto px-6 sm:px-6 max-w-3xl mt-8 flex justify-between flex-col sm:flex-row">
-      <PostTags tags={post.tags} class="mr-5 rtl:mr-0 rtl:ml-5" />
-      <SocialShare url={url} text={post.title} class="mt-5 sm:mt-1 align-middle text-gray-500 dark:text-slate-600" />
-    </div>
-  </article>
+          <div class="flex items-center">
+            <span class="text-sm text-gray-500 dark:text-gray-400 tracking-widest mr-4 transition-colors duration-300">SHARE</span>
+            <SocialShare url={url} text={post.title} class="flex space-x-3 text-gray-500 dark:text-gray-400" />
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
 </section>

@@ -1,11 +1,13 @@
 ---
 import { APP_BLOG } from 'astrowind:config';
+import { Icon } from 'astro-icon/components';
 import type { Post } from '~/types';
 
 import Image from '~/components/common/Image.astro';
 
 import { findImage } from '~/utils/images';
 import { getPermalink } from '~/utils/permalinks';
+import { getFormattedDate } from '~/utils/utils';
 
 export interface Props {
   post: Post;
@@ -17,22 +19,23 @@ const image = await findImage(post.image);
 const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : '';
 ---
 
-<article
-  class="mb-6 transition intersect-once intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade"
+<article 
+  class="bg-white dark:bg-gray-800 transition-colors duration-300 hover:shadow-lg dark:hover:shadow-gray-900 transform hover:-translate-y-1 duration-300 mb-6 rounded-lg overflow-hidden intersect-once intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade"
+  data-category={post.category?.title || 'Uncategorized'}
 >
-  <div class="relative md:h-64 bg-gray-400 dark:bg-slate-700 rounded shadow-lg mb-6">
+  <div class="relative aspect-[4/3]">
     {
       image &&
         (link ? (
           <a href={link}>
             <Image
               src={image}
-              class="w-full md:h-full rounded shadow-lg bg-gray-400 dark:bg-slate-700"
+              class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
               widths={[400, 900]}
               width={400}
               sizes="(max-width: 900px) 400px, 900px"
               alt={post.title}
-              aspectRatio="16:9"
+              aspectRatio="4:3"
               layout="cover"
               loading="lazy"
               decoding="async"
@@ -41,31 +44,52 @@ const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : 
         ) : (
           <Image
             src={image}
-            class="w-full md:h-full rounded shadow-lg bg-gray-400 dark:bg-slate-700"
+            class="w-full h-full object-cover"
             widths={[400, 900]}
             width={400}
             sizes="(max-width: 900px) 400px, 900px"
             alt={post.title}
-            aspectRatio="16:9"
+            aspectRatio="4:3"
             layout="cover"
             loading="lazy"
             decoding="async"
           />
         ))
     }
-  </div>
-
-  <h3 class="text-xl sm:text-2xl font-bold leading-tight mb-2 font-heading dark:text-slate-300">
     {
-      link ? (
-        <a class="inline-block hover:text-primary dark:hover:text-blue-700 transition ease-in duration-200" href={link}>
-          {post.title}
-        </a>
-      ) : (
-        post.title
+      post.category && (
+        <div class="absolute top-0 left-0 bg-blue-900 dark:bg-blue-600 text-white text-xs tracking-wider py-2 px-4 transition-colors duration-300">
+          {post.category.title}
+        </div>
       )
     }
-  </h3>
-
-  <p class="text-muted dark:text-slate-400 text-lg">{post.excerpt}</p>
+  </div>
+  <div class="p-6">
+    <div class="text-sm text-gray-500 dark:text-gray-400 mb-3 transition-colors duration-300">
+      {post.publishDate && getFormattedDate(post.publishDate)}
+    </div>
+    <h3 class="text-2xl font-light text-gray-900 dark:text-white mb-4 transition-colors duration-300">
+      {
+        link ? (
+          <a class="hover:text-blue-900 dark:hover:text-blue-400 transition-colors duration-300" href={link}>
+            {post.title}
+          </a>
+        ) : (
+          post.title
+        )
+      }
+    </h3>
+    <p class="text-gray-700 dark:text-gray-300 mb-6 transition-colors duration-300">{post.excerpt}</p>
+    {
+      link && (
+        <a
+          href={link}
+          class="inline-flex items-center text-blue-900 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors duration-300 group"
+        >
+          <span class="text-sm tracking-widest mr-2">READ MORE</span>
+          <Icon name="tabler:arrow-right" class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+        </a>
+      )
+    }
+  </div>
 </article>
