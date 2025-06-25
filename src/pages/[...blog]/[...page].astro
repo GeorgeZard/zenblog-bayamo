@@ -21,8 +21,19 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 const { page } = Astro.props as Props;
 const currentPage = page.currentPage ?? 1;
 
-// Get all posts to generate categories for filtering
+// Get all posts for category generation and filtering
 const allPosts = await fetchPosts();
+
+// Read the category from the URL's query string
+const currentCategory = Astro.url.searchParams.get('category') || 'All';
+
+// Filter posts on the server based on the current category
+const filteredPosts = allPosts.filter(post => {
+  if (currentCategory === 'All') {
+    return true; // Show all posts
+  }
+  return post.category?.title === currentCategory;
+});
 
 // Get unique categories from real posts, plus 'All'
 const categorySet = new Set(['All']);
@@ -37,7 +48,7 @@ const categories = Array.from(categorySet);
 // const allTags = await findTags();
 
 const metadata = {
-  title: `Blog${currentPage > 1 ? ` — Page ${currentPage}` : ''}`,
+  title: `${currentCategory === 'All' ? 'Blog' : `Blog - ${currentCategory}`}${currentPage > 1 ? ` — Page ${currentPage}` : ''}`,
   robots: {
     index: blogListRobots?.index && currentPage === 1,
     follow: blogListRobots?.follow,
@@ -73,18 +84,21 @@ const metadata = {
               <Icon name="tabler:filter" class="w-5 h-5 text-gray-500 dark:text-gray-400 mr-2 transition-colors duration-300" />
               <span class="text-sm text-gray-500 dark:text-gray-400 tracking-widest transition-colors duration-300">FILTER BY</span>
             </div>
-            <div class="flex flex-wrap gap-3" id="category-filters">
+            <div class="flex flex-wrap gap-3">
               {categories.map((category) => (
-                <button
-                  class={`px-6 py-2 text-sm tracking-wider transition-colors duration-300 category-filter ${
-                    category === 'All'
-                      ? 'bg-blue-900 dark:bg-blue-600 text-white'
-                      : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'
-                  }`}
-                  data-category={category}
+                <a
+                  href={category === 'All' ? '/blog' : `/blog?category=${encodeURIComponent(category)}`}
+                  class:list={[
+                    'px-6 py-2 text-sm tracking-wider transition-colors duration-300 rounded',
+                    {
+                      'bg-blue-900 dark:bg-blue-600 text-white shadow-md': category === currentCategory,
+                      'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600': category !== currentCategory,
+                    }
+                  ]}
+                  aria-current={category === currentCategory ? 'page' : 'false'}
                 >
                   {category}
-                </button>
+                </a>
               ))}
             </div>
           </div>
@@ -93,7 +107,7 @@ const metadata = {
       
       <!-- Blog Posts Grid -->
       <div id="blog-posts-container">
-        <Grid posts={allPosts} />
+        <Grid posts={filteredPosts} />
       </div>
       
       <!-- Pagination -->
@@ -104,52 +118,3 @@ const metadata = {
   </section>
 </Layout>
 
-<script>
-  // Blog category filtering functionality
-  document.addEventListener('DOMContentLoaded', () => {
-    // Wait a bit more for all components to render
-    setTimeout(() => {
-      const categoryFilters = document.querySelectorAll('.category-filter');
-      const updateBlogPosts = () => {
-        return document.querySelectorAll('article[data-category]');
-      };
-
-      categoryFilters.forEach(filter => {
-        filter.addEventListener('click', () => {
-          const selectedCategory = filter.getAttribute('data-category');
-          
-          // Update active button styles
-          categoryFilters.forEach(btn => {
-            btn.classList.remove('bg-blue-900', 'dark:bg-blue-600', 'text-white');
-            btn.classList.add('bg-white', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300', 'hover:bg-gray-100', 'dark:hover:bg-gray-600');
-          });
-          
-          filter.classList.add('bg-blue-900', 'dark:bg-blue-600', 'text-white');
-          filter.classList.remove('bg-white', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300', 'hover:bg-gray-100', 'dark:hover:bg-gray-600');
-          
-          // Get fresh list of blog posts
-          const blogPostItems = updateBlogPosts();
-          
-          // Filter blog posts
-          blogPostItems.forEach(item => {
-            const htmlItem = item as HTMLElement;
-            const postCategory = htmlItem.getAttribute('data-category') || 'Uncategorized';
-            
-            if (selectedCategory === 'All' || postCategory === selectedCategory) {
-              htmlItem.style.display = 'block';
-              htmlItem.style.opacity = '0';
-              setTimeout(() => {
-                htmlItem.style.opacity = '1';
-              }, 50);
-            } else {
-              htmlItem.style.opacity = '0';
-              setTimeout(() => {
-                htmlItem.style.display = 'none';
-              }, 300);
-            }
-          });
-        });
-      });
-    }, 100);
-  });
-</script>

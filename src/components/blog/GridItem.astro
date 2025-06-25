@@ -19,8 +19,8 @@ const image = await findImage(post.image);
 const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : '';
 ---
 
-<article 
-  class="bg-white dark:bg-gray-800 transition-colors duration-300 hover:shadow-lg dark:hover:shadow-gray-900 transform hover:-translate-y-1 duration-300 mb-6 rounded-lg overflow-hidden intersect-once intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade"
+<article
+  class="bg-white dark:bg-gray-800 transition-colors duration-300 hover:shadow-lg dark:hover:shadow-gray-900 transform hover:-translate-y-1 duration-300 mb-6 rounded-lg overflow-hidden"
   data-category={post.category?.title || 'Uncategorized'}
 >
   <div class="relative aspect-[4/3]">

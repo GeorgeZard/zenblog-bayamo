@@ -1,0 +1,51 @@
+---
+import { Icon } from 'astro-icon/components';
+import Grid from '~/components/blog/Grid.astro';
+import { fetchPosts } from '~/utils/blog';
+import { getBlogPermalink } from '~/utils/permalinks';
+
+// BlogPreview component - for homepage use only
+// Shows latest 6 posts without filtering functionality
+// Clean and focused for homepage performance
+
+// Fetch latest posts for homepage preview
+const allPosts = await fetchPosts();
+const previewPosts = allPosts.slice(0, 6);
+---
+
+<section id="blog" class="py-24 bg-[#f5f3ee] dark:bg-gray-800 transition-colors duration-300">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12">
+    <!-- Header -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 mb-16">
+      <div class="lg:col-span-8">
+        <h5 class="text-sm tracking-widest text-gray-500 dark:text-gray-400 mb-6 transition-colors duration-300">OUR JOURNAL</h5>
+        <h2 class="text-4xl md:text-6xl font-light text-gray-900 dark:text-white mb-8 transition-colors duration-300">
+          BAYAMO
+          <br />
+          STORIES
+        </h2>
+        <div class="w-24 h-1 bg-blue-900 dark:bg-blue-400 mb-8 transition-colors duration-300"></div>
+        <p class="text-xl text-gray-700 dark:text-gray-300 mb-6 max-w-lg transition-colors duration-300">
+          Explore our collection of stories, insights and updates from Bayamo Beach Bar. Discover the experiences
+          that make our venue truly special.
+        </p>
+      </div>
+    </div>
+    
+    <!-- Blog Posts Grid - Preview only, no filtering -->
+    <div>
+      <Grid posts={previewPosts} />
+    </div>
+    
+    <!-- View All Button -->
+    <div class="mt-16 flex justify-center">
+      <a 
+        href={getBlogPermalink()} 
+        class="inline-flex items-center bg-blue-900 dark:bg-blue-600 hover:bg-blue-700 dark:hover:bg-blue-500 text-white px-8 py-4 rounded text-sm tracking-wider transition-all duration-300 transform hover:scale-105 hover:shadow-lg group"
+      >
+        <span class="mr-2">VIEW ALL STORIES</span>
+        <Icon name="tabler:arrow-right" class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+      </a>
+    </div>
+  </div>
+</section>
