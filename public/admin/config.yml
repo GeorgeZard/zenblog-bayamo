@@ -4,7 +4,8 @@ backend:
 
 media_folder: 'src/assets/images'
 public_folder: 'src/assets/images'
-
+display_url: https://bayamo-zen.netlify.app
+site_url: https://bayamo-zen.netlify.app
 collections:
   # Existing post collection (updated path to src/data/post)
   - name: 'post'
