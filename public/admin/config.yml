@@ -3,7 +3,7 @@ backend:
   branch: main
 
 media_folder: 'src/assets/images'
-public_folder: '/_astro'
+public_folder: 'src/assets/images'
 
 collections:
   # Existing post collection (updated path to src/data/post)
@@ -21,10 +21,12 @@ collections:
       - { label: 'Author', name: 'author', widget: 'string' }
       - { label: 'Content', name: 'body', widget: 'markdown' }
 
-  # New collection for src/content/
+  # New collection for src/content/config.ts (fixed to use files array)
   - name: 'content_config'
     label: 'Content Config'
-    file: 'src/content/config.ts'
+    files:
+      - file: 'src/content/config.ts'
+        label: 'Content Config'
     fields:
       - { label: 'Title', name: 'title', widget: 'string', required: false }
       - { label: 'Ignore Title Template', name: 'ignoreTitleTemplate', widget: 'boolean', required: false }
