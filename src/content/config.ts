@@ -6,18 +6,14 @@ const metadataDefinition = () =>
     .object({
       title: z.string().optional(),
       ignoreTitleTemplate: z.boolean().optional(),
-
       canonical: z.string().url().optional(),
-
       robots: z
         .object({
           index: z.boolean().optional(),
           follow: z.boolean().optional(),
         })
         .optional(),
-
       description: z.string().optional(),
-
       openGraph: z
         .object({
           url: z.string().optional(),
@@ -35,7 +31,6 @@ const metadataDefinition = () =>
           type: z.string().optional(),
         })
         .optional(),
-
       twitter: z
         .object({
           handle: z.string().optional(),
@@ -52,15 +47,16 @@ const postCollection = defineCollection({
     publishDate: z.date().optional(),
     updateDate: z.date().optional(),
     draft: z.boolean().optional(),
-
     title: z.string(),
     excerpt: z.string().optional(),
-    image: z.string().optional(),
-
+    image: z.string()
+      .refine(val => val.startsWith('http') || val.startsWith('/') || val.startsWith('src/assets'), {
+        message: 'Image must be a valid URL or path starting with src/assets/'
+      })
+      .optional(),
     category: z.string().optional(),
     tags: z.array(z.string()).optional(),
     author: z.string().optional(),
-
     metadata: metadataDefinition(),
   }),
 });
